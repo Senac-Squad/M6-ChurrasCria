@@ -1,0 +1,19 @@
+.conteudo-margin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.c-loader {
+    animation: rodando 1s infinite;
+    border: 3px solid #e5e5e5;
+    border-radius: 500%;
+    border-top-color: #c40233;
+    height: 30px;
+    width: 30px;
+    margin-bottom: 270px;
+}
+@keyframes rodando {
+    to {
+        transform: rotate(1turn);
+    }
+}

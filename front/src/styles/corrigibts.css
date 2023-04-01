@@ -1,0 +1,10 @@
+.conteudo-margin{
+    display: flex;
+    flex-direction: column;
+}
+.conteudo-margin h1{
+    margin: 50px;
+}
+.conteudo-margin button{
+    margin-bottom: 10px;
+}

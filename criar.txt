@@ -1,0 +1,11 @@
+estrelas na avaliacao
+
+form avaliar
+form login
+
+admin painel
+admin restaurante
+admin excluir 
+
+carrinho
+carrinho > (pagina) finalizar compra > mandar pra home ou pra avaliacao
