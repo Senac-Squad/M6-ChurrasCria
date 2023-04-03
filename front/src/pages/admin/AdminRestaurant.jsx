@@ -4,16 +4,16 @@ import Api from '../../api/api.js'
 import '../../styles/admincss.css'
 
 function AdminRestaurant() {
-    const [cardapio, setCardapio] = useState([])
+    const [restaurante, setRestaurante] = useState([])
 
     useEffect (() => {
-        async function getCardapio() {
-            const response = await Api().getCardapio()
-            const cardapios = await response.json()
-            setCardapio(cardapios.data)
+        async function getRestaurante() {
+            const response = await Api().getRestaurante()
+            const restaurantes = await response.json()
+            setRestaurante(restaurantes.data)
         }
 
-        getCardapio()
+        getRestaurante()
     }, [])
 
     async function handleSubmit(event) {
@@ -25,28 +25,28 @@ function AdminRestaurant() {
         // const title = form.title.value
         // const description = form.description.value
 
-        const response = await Api().postCardapio({descricao, preco, imagem})
+        const response = await Api().postRestaurante({descricao, preco, imagem})
         if(!response.ok) {
-            alert('Erro ao cadastrar cardapio')
+            alert('Erro ao cadastrar Restaurante')
             return
         }
-        const cardapio1 = await response.json()
-        alert('item cadastrada com sucesso no cardapio')
-        setCardapio([...cardapio, cardapio1.data])
+        const restaurante1 = await response.json()
+        alert('Restaurante parceiro cadastrado!')
+        setRestaurante([...restaurante, restaurante1.data])
         form.reset()
     }
 
-    async function excluirCardapio(id) {
+    async function excluirRestaurante(id) {
         console.log(id)
-        const response = await Api().deleteCardapio(id)
+        const response = await Api().deleteRestaurante(id)
         if(!response.ok) {
             alert('Erro ao excluir item')
             return
         }
 
         alert('item excluído com sucesso')
-        const cardapiosAtualizados = cardapio.filter((item) => item.id !== id)
-        setCardapio(cardapiosAtualizados)
+        const restauranteAtualizados = restaurante.filter((item) => item.id !== id)
+        setRestaurante(restauranteAtualizados)
     }
 
     function habilitarEdicao(botao, id) {
@@ -88,12 +88,12 @@ function AdminRestaurant() {
         // const colunaImagem = linha.children[3]
         // const inputImagem = colunaImagem.children[0]
 
-        const response = await Api().patchCardapio({id: id, descricao: inputDescricao.value,preco: inputPreco.value})
+        const response = await Api().patchRestaurante({id: id, descricao: inputDescricao.value,preco: inputPreco.value})
         if(!response.ok) {
             alert('Erro ao editar')
             return
         }
-        alert('Cardapio editada com sucesso')
+        alert('Restaurante editada com sucesso')
         
         colunaDescricao.innerText = inputDescricao.value
         colunaPreco.innerText = inputPreco.value
@@ -107,9 +107,9 @@ function AdminRestaurant() {
 
     return (
         <Container className="conteudo-margin">
-            <h1>Admin Cardapio</h1>
+            <h1>Admin Restaurante</h1>
             <hr />
-            <h2>Adicionar Item ao cardapio</h2>
+            <h2>Adicionar um Restaurante paceiro!</h2>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="descricao">
                     <Form.Label>Descrição</Form.Label>
@@ -128,7 +128,7 @@ function AdminRestaurant() {
                 </Button>
             </Form>
             <hr />
-            <p>Lista de Cardapio</p>
+            <p>Lista de Restaurantes</p>
             <Table striped hover>
                 <thead>
                     <tr>
@@ -140,7 +140,7 @@ function AdminRestaurant() {
                     </tr>
                 </thead>
                 <tbody>
-                    {cardapio.map((item) => (
+                    {restaurante.map((item) => (
                         <tr key={item.id}>
                             <td>{item.id}</td>
                             <td>{item.descricao}</td>
@@ -149,7 +149,7 @@ function AdminRestaurant() {
                             <td>
                                 <Button variant="primary" onClick={(event) => {habilitarEdicao(event.target, item.id)}}>Editar</Button>
                                  | 
-                                 <Button variant="danger" onClick={() => {excluirCardapio(item.id)}}>Excluir</Button>
+                                 <Button variant="danger" onClick={() => {excluirRestaurante(item.id)}}>Excluir</Button>
                             </td>
                         </tr>
                     ))}
