@@ -1,7 +1,6 @@
 estrelas na avaliacao
 
 form avaliar
-form login
 
 admin painel
 admin restaurante
