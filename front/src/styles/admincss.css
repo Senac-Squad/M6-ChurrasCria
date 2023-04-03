@@ -1,4 +1,4 @@
-input{
+input, td{
     text-overflow: clip;
 }
 .separarAdmin{

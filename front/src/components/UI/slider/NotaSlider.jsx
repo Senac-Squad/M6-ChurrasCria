@@ -30,6 +30,10 @@ const NotaSlider = () => {
     fetchAvaliacao();
   }, []);
 
+  // for (let i = 0; i < avaliar.nota; i++) {
+  //   const element = array[i];
+  // }
+
   return (
     <Slider {...settings}>
       {avaliacao.map((avaliar) => (

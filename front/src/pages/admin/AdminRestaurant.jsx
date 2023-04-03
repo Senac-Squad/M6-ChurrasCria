@@ -19,13 +19,10 @@ function AdminRestaurant() {
     async function handleSubmit(event) {
         event.preventDefault()
         const form = event.currentTarget
-        const descricao = form.descricao.value 
-        const preco = form.preco.value
-        const imagem = form.imagem.value
-        // const title = form.title.value
-        // const description = form.description.value
+        const nome = form.nome.value 
+        const endereco = form.endereco.value
 
-        const response = await Api().postRestaurante({descricao, preco, imagem})
+        const response = await Api().postRestaurante({nome, endereco})
         if(!response.ok) {
             alert('Erro ao cadastrar Restaurante')
             return
@@ -40,7 +37,7 @@ function AdminRestaurant() {
         console.log(id)
         const response = await Api().deleteRestaurante(id)
         if(!response.ok) {
-            alert('Erro ao excluir item')
+            alert('Erro ao excluir restaurante.')
             return
         }
 
@@ -56,48 +53,39 @@ function AdminRestaurant() {
         botao.onclick = (event) => {salvarEdicao(event.target, id)}
 
         const linha = botao.parentNode.parentNode
-        const colunaPreco = linha.children[1]
-        // Cria um input para o título
-        const inputPreco = document.createElement('input')
-        inputPreco.type = 'text'
-        inputPreco.value = colunaPreco.innerText
-        colunaPreco.innerText = ''
-        colunaPreco.appendChild(inputPreco)
-        // Cria um input para a descrição
-        const colunaDescricao = linha.children[2]
-        const inputDescricao = document.createElement('input')
-        inputDescricao.type = 'text'
-        inputDescricao.value = colunaDescricao.innerText
-        colunaDescricao.innerText = ''
-        colunaDescricao.appendChild(inputDescricao)
-        // Cria um input para a imagem
-        // const colunaImagem = linha.children[3]
-        // const inputImagem = document.createElement('input')
-        // inputImagem.type = 'text'
-        // inputImagem.value = colunaImagem.innerText
-        // colunaImagem.innerText = ''
-        // colunaImagem.appendChild(inputImagem)
+        const colunaNome = linha.children[1]
+
+        const inputNome = document.createElement('input')
+        inputNome.type = 'text'
+        inputNome.value = colunaNome.innerText
+        colunaNome.innerText = ''
+        colunaNome.appendChild(inputNome)
+
+        const colunaEndereco = linha.children[2]
+        const inputEndereco = document.createElement('input')
+        inputEndereco.type = 'text'
+        inputEndereco.value = colunaEndereco.innerText
+        colunaEndereco.innerText = ''
+        colunaEndereco.appendChild(inputEndereco)
+
     }
 
     async function salvarEdicao(botao, id) {
         const linha = botao.parentNode.parentNode
-        const colunaPreco = linha.children[2]
-        const inputPreco = colunaPreco.children[0]
-        const colunaDescricao = linha.children[1]
-        const inputDescricao = colunaDescricao.children[0]
-        // const colunaImagem = linha.children[3]
-        // const inputImagem = colunaImagem.children[0]
+        const colunaNome = linha.children[2]
+        const inputNome = colunaNome.children[0]
+        const colunaEndereco = linha.children[1]
+        const inputEndereco = colunaEndereco.children[0]
 
-        const response = await Api().patchRestaurante({id: id, descricao: inputDescricao.value,preco: inputPreco.value})
+        const response = await Api().patchRestaurante({id: id, nome: inputNome.value,endereco: inputEndereco.value})
         if(!response.ok) {
             alert('Erro ao editar')
             return
         }
         alert('Restaurante editada com sucesso')
         
-        colunaDescricao.innerText = inputDescricao.value
-        colunaPreco.innerText = inputPreco.value
-        // colunaImagem.innerText = inputImagem.value
+        colunaNome.innerText = inputNome.value
+        colunaEndereco.innerText = inputEndereco.value
 
         botao.innerText = 'Editar'
         botao.classList.remove('btn-success')
@@ -133,9 +121,8 @@ function AdminRestaurant() {
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Descricao</th>
-                        <th>Preco</th>
-                        {/* <th>Imagem</th> */}
+                        <th>Nome</th>
+                        <th>Endereço</th>
                         <th>Opções</th>
                     </tr>
                 </thead>
@@ -143,9 +130,8 @@ function AdminRestaurant() {
                     {restaurante.map((item) => (
                         <tr key={item.id}>
                             <td>{item.id}</td>
-                            <td>{item.descricao}</td>
-                            <td>{item.preco}</td>
-                            {/* <td>{item.imagem}</td> */}
+                            <td>{item.nome}</td>
+                            <td>{item.endereco}</td>
                             <td>
                                 <Button variant="primary" onClick={(event) => {habilitarEdicao(event.target, item.id)}}>Editar</Button>
                                  | 

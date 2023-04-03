@@ -21,11 +21,8 @@ function AdminCardapio() {
         const form = event.currentTarget
         const descricao = form.descricao.value 
         const preco = form.preco.value
-        const imagem = form.imagem.value
-        // const title = form.title.value
-        // const description = form.description.value
 
-        const response = await Api().postCardapio({descricao, preco, imagem})
+        const response = await Api().postCardapio({descricao, preco})
         if(!response.ok) {
             alert('Erro ao cadastrar cardapio')
             return
@@ -40,7 +37,7 @@ function AdminCardapio() {
         console.log(id)
         const response = await Api().deleteCardapio(id)
         if(!response.ok) {
-            alert('Erro ao excluir item')
+            alert('Erro ao excluir item do cardapio.')
             return
         }
 
@@ -70,13 +67,6 @@ function AdminCardapio() {
         inputDescricao.value = colunaDescricao.innerText
         colunaDescricao.innerText = ''
         colunaDescricao.appendChild(inputDescricao)
-        // Cria um input para a imagem
-        // const colunaImagem = linha.children[3]
-        // const inputImagem = document.createElement('input')
-        // inputImagem.type = 'text'
-        // inputImagem.value = colunaImagem.innerText
-        // colunaImagem.innerText = ''
-        // colunaImagem.appendChild(inputImagem)
     }
 
     async function salvarEdicao(botao, id) {
@@ -85,8 +75,6 @@ function AdminCardapio() {
         const inputPreco = colunaPreco.children[0]
         const colunaDescricao = linha.children[1]
         const inputDescricao = colunaDescricao.children[0]
-        // const colunaImagem = linha.children[3]
-        // const inputImagem = colunaImagem.children[0]
 
         const response = await Api().patchCardapio({id: id, descricao: inputDescricao.value,preco: inputPreco.value})
         if(!response.ok) {
@@ -97,7 +85,6 @@ function AdminCardapio() {
         
         colunaDescricao.innerText = inputDescricao.value
         colunaPreco.innerText = inputPreco.value
-        // colunaImagem.innerText = inputImagem.value
 
         botao.innerText = 'Editar'
         botao.classList.remove('btn-success')
@@ -135,7 +122,6 @@ function AdminCardapio() {
                         <th>Id</th>
                         <th>Descricao</th>
                         <th>Preco</th>
-                        {/* <th>Imagem</th> */}
                         <th>Opções</th>
                     </tr>
                 </thead>
@@ -145,7 +131,6 @@ function AdminCardapio() {
                             <td>{item.id}</td>
                             <td>{item.descricao}</td>
                             <td>{item.preco}</td>
-                            {/* <td>{item.imagem}</td> */}
                             <td>
                                 <Button variant="primary" onClick={(event) => {habilitarEdicao(event.target, item.id)}}>Editar</Button>
                                  | 

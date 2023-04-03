@@ -1,20 +1,33 @@
-import { getConnection } from "../infra/connection.js"
+import { getConnection } from "../infra/connection.js";
 
 export default class ApplicationModel {
+    // =============================================== Campos estáticos internos do construtor ===============================================
     static _propertyToColumn = new Map()
     static _columnToProperty = new Map()
 
-    static configurar() {
-        throw new Error('Você deve criar sua própria versão de SuaModel.configurar! Dentro dela chame o método "SuaModel.associar" para relacionar as propriedades da model com as colunas do banco!')
+    // =============================================== Métodos estáticos internos do construtor ===============================================
+    static async _clear() {
+        const connection = await getConnection()
+        await connection.exec(`DELETE FROM ${this.getTableName()};`)
+        await connection.close()
     }
 
-    static associar( property, column ) {
-        this._propertyToColumn.set(property, column)
-        this._columnToProperty.set(column, property)
+    static async _drop() {
+        const connection = await getConnection()
+        await connection.exec(`DROP TABLE IF EXISTS ${this.getTableName()};`)
+        await connection.close()
     }
 
-    static getTableName() {
-        return this.name.toLowerCase()
+    static async _migrate(columnsConfig) {
+        const connection = await getConnection()
+        await connection.exec(`CREATE TABLE IF NOT EXISTS ${this.getTableName()} (${columnsConfig.join(',')});`)
+        await connection.close()
+    }
+
+    static async _seed(models) {
+        for ( const model of models ) {
+            await model.save()
+        }
     }
 
     static _toModel(dbResult) {
@@ -43,72 +56,19 @@ export default class ApplicationModel {
         return row
     }
 
-    // ----- metodos auxiliares
-    static async _clear() {
-        const connection = await getConnection()
-        await connection.exec(`DELETE FROM ${this.getTableName()};`)
-        await connection.close()
-    }
-    static async _drop() {
-        const connection = await getConnection()
-        await connection.exec(`DROP TABLE IF EXISTS ${this.getTableName()};`)
-        await connection.close()
-    }
-    static async _migrate(columnsConfig) {
-        const connection = await getConnection()
-        await connection.exec(`CREATE TABLE IF NOT EXISTS ${this.getTableName()} (${columnsConfig.join(',')});`)
-        await connection.close()
-    }
-    static async _seed(models) {
-        for ( const model of models ) {
-            await model.save()
-        }
+    // =============================================== Métodos estáticos públicosdo construtor ===============================================
+    static getTableName() {
+        return this.name.toLowerCase()
     }
 
-    // --------
-
-    
-    id;
-
-    async save() {
-        // Busca o nome da tabela
-        const table = this.constructor.getTableName()
-        // Busca a tabela de tradução de propriedade para coluna
-        const propToCol = this.constructor._propertyToColumn
-
-        // Se transforma em um objeto traduzido para colunas do banco de dados
-        const dbObj = this.constructor._toDatabase(this)
-        // Guarda o nome das colunas do banco
-        const columns = Object.keys(dbObj)
-        // Guarda os valores que serão inseridos nas colunas
-        const values = Object.values(dbObj)
-
-        const connection = await getConnection()
-        // Possui id: atualizar
-        if (this.id) {
-            // Gera a query no formato do UPDATE
-            const updates = columns.map(column => `${column}=?`)
-            // Executa um update na tabela, informa quais colunas que serão modificadas, seus valores e qual linha será afetada
-            await connection.run(
-                `UPDATE ${table} SET ${updates} WHERE ${propToCol.get('id')} = ?;`,
-                ...values,
-                this.id
-            )
-        // Não possui id: inserir
-        } else {
-            // Busca o último id da inserção executada informando o nome das colunas e os valores inseridos
-            const { lastID } = await connection.run(
-                `INSERT INTO ${table} (${columns}) VALUES (${values.map(_ => '?').join(',')});`,
-                ...values
-            )
-            // Atualiza o objeto do código para refletir as alterações do banco de dados
-            this.id = lastID
-        }
-        // Finaliza a conexão
-        await connection.close()
+    static configurar() {
+        throw new Error('Erro!')
     }
 
-    // select
+    static associar( property, column ) {
+        this._propertyToColumn.set(property, column)
+        this._columnToProperty.set(column, property)
+    }
 
     static async findAll() {
         const connection = await getConnection()
@@ -116,21 +76,59 @@ export default class ApplicationModel {
             `SELECT * FROM ${this.getTableName()}`
         )
         await connection.close()
-        // Importante traduzir os resultados do banco para as models que podemos usar
         return all.map( result => this._toModel(result) )
     }
 
     static async findByProperty(property, value) {
         const connection = await getConnection()
-        // Traduz o nome da propriedade para o nome da coluna
         const column = this._propertyToColumn.get(property)
         const result = await connection.get(
             `SELECT * FROM ${this.getTableName()} WHERE ${column} = ?`,
             value
         )
         await connection.close()
-        // Traduz de volta o resultado para uma model
         return this._toModel(result)
     }
 
+    // =============================================== Campos públicos da instância ===============================================
+    id;
+
+    // =============================================== Métodos públicos da instância ===============================================
+    async save() {
+        const table = this.constructor.getTableName()
+        const propToCol = this.constructor._propertyToColumn
+
+        const dbObj = this.constructor._toDatabase(this)
+        const columns = Object.keys(dbObj)
+        const values = Object.values(dbObj)
+
+        const connection = await getConnection()
+        if (this.id) {
+            const updates = columns.map(column => `${column}=?`)
+            await connection.run(
+                `UPDATE ${table} SET ${updates} WHERE ${propToCol.get('id')} = ?;`,
+                ...values,
+                this.id
+            )
+        } else {
+            const { lastID } = await connection.run(
+                `INSERT INTO ${table} (${columns}) VALUES (${values.map(_ => '?').join(',')});`,
+                ...values
+            )
+            this.id = lastID
+        }
+        await connection.close()
+    }
+
+    async delete() {
+        const table = this.constructor.getTableName()
+        const propToCol = this.constructor._propertyToColumn
+
+        const connection = await getConnection()
+        await connection.run(
+            `DELETE FROM ${table} WHERE ${propToCol.get('id')} = ?;`,
+            this.id
+        )
+        await connection.close()
+    }
 }

@@ -76,7 +76,7 @@ export default class RestauranteController {
             })
         }
 
-        await Restaurante.delete()
+        await restaurante.delete()
 
         res.status(200).send({
             message: 'Parceria finalizada!'

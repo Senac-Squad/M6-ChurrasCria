@@ -3,10 +3,10 @@ import { verificarToken } from "../middleware/authorization.js"
 
 export default class CardapioController {
     static rotas(app) {
-        app.post('/cardapio', CardapioController.inserir)
+        app.post('/cardapio', verificarToken, CardapioController.inserir)
         app.get('/cardapio', CardapioController.listarTodos)
-        app.patch('/cardapio/:id', CardapioController.atualizar)
-        app.delete('/cardapio/:id', CardapioController.deletar)
+        app.patch('/cardapio/:id', verificarToken, CardapioController.atualizar)
+        app.delete('/cardapio/:id', verificarToken, CardapioController.deletar)
     }
 
     static async inserir(req, res) {
@@ -21,8 +21,8 @@ export default class CardapioController {
         cardapio.descricao = descricao
         cardapio.preco = preco
         cardapio.imagem = imagem
+        
         await cardapio.save()
-
 
         res.status(200).send({
             message: 'Produto inserido no cardapio!',
@@ -80,7 +80,7 @@ export default class CardapioController {
         await cardapio.delete()
 
         res.status(200).send({
-            message: 'Produto deletado com sucesso!'
+            message: 'Produto deletado do cardapio!'
         })
     }
 

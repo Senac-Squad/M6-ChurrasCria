@@ -1,8 +1,6 @@
-import {Container, Table, Form, Button} from 'react-bootstrap'
-import {useEffect, useState} from 'react'
-import Api from '../../api/api.js'
+import {Container} from 'react-bootstrap'
 import '../../styles/admincss.css'
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 function AdminPainel() {

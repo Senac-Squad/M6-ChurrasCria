@@ -14,4 +14,4 @@ const drop = async () => {
     await Promise.all(models.map(model => model._drop()))
 }
 
-clear()
+drop()

@@ -39,7 +39,11 @@ const Api = () => {
         },
         deleteCardapio (id) {
             return fetch(`${url}/cardapio/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': localStorage.getItem('token')
+                }
             })
         },
         // restaurante
@@ -68,7 +72,11 @@ const Api = () => {
         },
         deleteRestaurante (id) {
             return fetch(`${url}/restaurante/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': localStorage.getItem('token')
+                }
             })
         },
         // avaliar
