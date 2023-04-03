@@ -1,8 +1,5 @@
 estrelas na avaliacao
 
-form avaliar
-
-admin painel
 admin restaurante
 admin excluir 
 
