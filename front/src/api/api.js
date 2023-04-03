@@ -2,7 +2,7 @@ const Api = () => {
     const url = 'http://localhost:3001'
 
     return {
-        login (email, password) {
+        login (email, senha) {
             return fetch(`${url}/login`, {
                 method: 'POST',
                 headers: {
@@ -10,7 +10,7 @@ const Api = () => {
                 },
                 body: JSON.stringify({
                     email,
-                    password
+                    senha
                 })
             })
         },       
@@ -40,6 +40,49 @@ const Api = () => {
         deleteCardapio (id) {
             return fetch(`${url}/cardapio/${id}`, {
                 method: 'DELETE'
+            })
+        },
+        // restaurante
+        getRestaurante () {
+            return fetch(`${url}/restaurante`)
+        },
+        postRestaurante (restaurantes) {
+            return fetch(`${url}/restaurante`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': localStorage.getItem('token')
+                },
+                body: JSON.stringify(restaurantes)
+            })
+        },
+        patchRestaurante (restaurantes) {
+            return fetch(`${url}/restaurante/${restaurantes.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': localStorage.getItem('token')
+                },
+                body: JSON.stringify(restaurantes)
+            })
+        },
+        deleteRestaurante (id) {
+            return fetch(`${url}/restaurante/${id}`, {
+                method: 'DELETE'
+            })
+        },
+        // avaliar
+        getAvaliar () {
+            return fetch(`${url}/avaliar`)
+        },
+        postAvaliar (avaliar) {
+            return fetch(`${url}/avaliar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': localStorage.getItem('token')
+                },
+                body: JSON.stringify(avaliar)
             })
         }
     }
