@@ -2,6 +2,18 @@ const Api = () => {
     const url = 'http://localhost:3001'
 
     return {
+        loginAdm (email, senha) {
+            return fetch(`${url}/adm`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    senha
+                })
+            })
+        },
         login (email, senha) {
             return fetch(`${url}/login`, {
                 method: 'POST',

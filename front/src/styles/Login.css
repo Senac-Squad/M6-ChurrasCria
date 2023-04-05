@@ -1,3 +1,18 @@
+.conteudo-margin {
+   margin: 110px;
+   gap: 10px;
+}
+
 .conteudo-margin h1{
     color: #c40233;
+}
+
+.form-label{
+    font-weight: 700;
+    color: #c40233
+}
+
+.botao{
+    margin:30px;
+    min-width: 230px;
 }

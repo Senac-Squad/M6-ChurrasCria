@@ -4,12 +4,13 @@ import Cardapio from "../src/DAO/Cardapio.js"
 import Cliente from "../src/DAO/Cliente.js"
 import Pedido from "../src/DAO/Pedido.js"
 import Restaurante from "../src/DAO/Restaurante.js"
+import Adm from "../src/DAO/Adm.js"
 
 import { hashSync } from "bcrypt"
 
 
 const models = [
-    Page, Avaliar, Cardapio, Cliente, Pedido, Restaurante
+    Page, Avaliar, Cardapio, Cliente, Pedido, Restaurante, Adm
 ]
 
 const seed = async () => {
@@ -57,6 +58,10 @@ const seed = async () => {
     cardapio5.imagem = 'https://curitibacult.com.br/wp-content/uploads/2020/11/batata-frita-a-vontade-curitiba.png'
     const cardapios5 = [cardapio5]
 
+    const adm = new Adm()
+    adm.email = "admin@admin.com"
+    adm.senha = hashSync('admin', 10)
+    const adms = [adm]
 
     const cliente = new Cliente()
     cliente.nome = 'rodrigo'
@@ -171,6 +176,7 @@ const seed = async () => {
     await Cardapio._seed(cardapios4)
     await Cardapio._seed(cardapios5)
 
+    await Adm._seed(adms)
 
     await Cliente._seed(clientes)
     await Cliente._seed(clientes1)

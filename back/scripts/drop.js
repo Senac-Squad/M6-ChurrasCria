@@ -4,10 +4,11 @@ import Cardapio from "../src/DAO/Cardapio.js"
 import Cliente from "../src/DAO/Cliente.js"
 import Pedido from "../src/DAO/Pedido.js"
 import Restaurante from "../src/DAO/Restaurante.js"
+import Adm from "../src/DAO/Adm.js"
 
 
 const models = [
-    Page, Avaliar, Cardapio, Cliente, Pedido, Restaurante
+    Page, Avaliar, Cardapio, Cliente, Pedido, Restaurante, Adm
 ]
 
 const drop = async () => {

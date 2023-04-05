@@ -6,6 +6,9 @@ input, td{
     flex-direction: row;
     gap: 200px;
 }
+.admin-margin{
+    margin: 1rem;
+}
 .conteudo-margin{
     display: flex;
     flex-direction: column;

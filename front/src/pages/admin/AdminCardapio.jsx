@@ -93,7 +93,7 @@ function AdminCardapio() {
 
 
     return (
-        <Container className="conteudo-margin">
+        <Container className="admin-margin">
             <h1>Admin Cardapio</h1>
             <hr />
             <h2>Adicionar Item ao cardapio</h2>

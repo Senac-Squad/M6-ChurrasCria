@@ -94,7 +94,7 @@ function AdminRestaurant() {
 
 
     return (
-        <Container className="conteudo-margin">
+        <Container className="admin-margin">
             <h1>Admin Restaurante</h1>
             <hr />
             <h2>Adicionar um Restaurante paceiro!</h2>
